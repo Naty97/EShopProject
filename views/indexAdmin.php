@@ -11,12 +11,6 @@ if (!$user) {
 #    header('Location: ' . '../logic/dashboard.php');
 #    die();
 #}
-
-require("../logic/connection.php");
-$connection = Connect();
-$db = mysqli_select_db($connection, 'eshop_project');
-$sql = "SELECT COUNT(*) FROM users";
-$result = mysqli_query($connection, $sql);
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -20,14 +20,13 @@ if (!$user) {
  * Si el correo electrónico del usuario logueado es igual a admin@eshop.com, lo direccionará 
  * a la página del administrador donde podrá tener acceso a estadísticas y administración de
  * Categorías, Sub-Categorías y Productos.
- * En caso tal de que el usuario sea un cliente, le dará la bienvenida.
+ * En caso tal de que el usuario sea un cliente, le dará la bienvenida y enviará a la página 
+ * del cliente.
  */
 if ($user['email'] === 'admin@eshop.com') {
     header("Location: ../views/indexAdmin.php");
     die();
-} else { ?>
-    <h1> Welcome <?php echo $user['name'];
-                    echo " ";
-                    echo $user['lastname'] ?> </h1>
-<?php }
+} else {
+    header("Location: ../views/indexClient.php");
+}
 ?>

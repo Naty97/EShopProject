@@ -11,6 +11,16 @@ if (!$user) {
 #    header('Location: ' . '../logic/dashboard.php');
 #    die();
 #}
+
+require("../logic/connection.php");
+$connection = Connect();
+$db = mysqli_select_db($connection, 'eshop_project');
+$sql = "SELECT * FROM categories";
+$result = mysqli_query($connection, $sql);
+
+$sqlSelect = "SELECT s.name, p.name FROM sub_categories s, products p WHERE s.id = $id";
+$resultSelect = mysqli_query($connection, $sqlSelect);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -68,11 +78,9 @@ if (!$user) {
                     </button>
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
                         <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
-                            <a class="btn btn-info" href="../views/indexCarritoCompras.php" role="button"><i class="fa fa-shopping-cart"></i></a>&nbsp;
                             <li class="nav-item active">
-                                <a class="nav-link text-dark" href="#"> Inicio </a>
+                                <a class="nav-link text-dark" href="#">Inicio</a>
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link text-dark dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -81,23 +89,98 @@ if (!$user) {
                                     echo $user['lastname'] ?>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="#"><i class="fa fa-user"></i>&nbsp;&nbsp; Mi perfil </a>
+                                    <a class="dropdown-item" href="#">Mi perfil</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="../logic/logout.php"><i class="fa fa-sign-out"></i>&nbsp;&nbsp; Logout </a>
+                                    <a class="dropdown-item" href="../logic/logout.php">Logout</a>
                                 </div>
                             </li>
                         </ul>
-
                     </div>
-
                 </div>
-
             </nav>
 
-        </div>
-        <!-- Fin Page Content -->
+            <!-- Categories Datatable -->
+            <div class="container">
+                <!-- <div class="jumbotron"> -->
 
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table-sm" id="tableIdCategories">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col"> Name </th>
+                                    <th scope="col"> Actions </th>
+                                </tr>
+                            </thead>
+                            <?php
+                            if ($result) {
+                                foreach ($result as $row) {
+                            ?>
+                                    <tbody>
+                                        <tr>
+                                            <td align="center"> <?php echo $row['name'] ?> </td>
+
+                                            <td>
+                                                <button type="submit" onclick="ShowTable()" class="btn btn-success showBtn"><i class="fa fa-eye"></i></button>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                            <?php
+                                }
+                            } else {
+                                echo "No record found";
+                            }
+                            ?>
+                        </table>
+                    </div>
+                </div>
+                <!-- </div> -->
+            </div>
+            <!-- Final Categories Datatable -->
+
+            <!-- Sub-Categories Datatable -->
+            <div class="container">
+                <!-- <div class="jumbotron"> -->
+
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table-sm" id="tableIdSubCategories">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col"> Sub-Category Name </th>
+                                    <th scope="col"> Product Name </th>
+                                    <th scope="col"> Actions </th>
+                                </tr>
+                            </thead>
+                            <?php
+                            if ($resultSelect) {
+                                while ($select = mysqli_fetch_array($sqlSelect)) {
+                                    echo $select['id'] . $select['name'];
+                            ?>
+                                    <tbody>
+                                        <tr>
+                                            <td align="center"> <?php echo $row['name'] ?> </td>
+                                            <td align="center"> <?php echo $row['name'] ?> </td>
+                                        </tr>
+                                    </tbody>
+                            <?php
+                                }
+                            } else {
+                                echo "No record found";
+                            }
+                            ?>
+                        </table>
+                    </div>
+                </div>
+                <!-- </div> -->
+            </div>
+            <!-- Final Categories Datatable -->
+
+        </div>
     </div>
+
+    <!-- Fin Page Content -->
     <!-- Fin wrapper -->
 
     <!-- Bootstrap y JQuery -->
@@ -113,6 +196,11 @@ if (!$user) {
         });
     </script>
 
+    <script type="text/javascript">
+        function ShowTable() {
+            $("#tableIdSubCategories").show();
+        }
+    </script>
 </body>
 
 </html>
